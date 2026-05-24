@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✂ snip - Code Snippet Manager</title>
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">✂ snip</div>
+            <div class="search-container">
+                <input
+                    type="text"
+                    id="search"
+                    class="search-input"
+                    placeholder="Search snippets..."
+                    aria-label="Search snippets"
+                >
+            </div>
+            <button id="add-btn" class="btn btn-primary" aria-label="Add new snippet">
+                + New Snippet
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Languages</h3>
+                <div id="lang-filter" class="filter-list"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Tags</h3>
+                <div id="tag-filter" class="filter-list"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Statistics</h3>
+                <div id="stats" class="stats-list">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Snippets</span>
+                        <span id="stat-total" class="stat-value">0</span>
+                    </div>
+                    <div id="stats-by-lang"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div id="snippets-container" class="snippets-grid"></div>
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <p>No snippets found. Create one to get started!</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detail-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="detail-title"></h2>
+                <button class="modal-close" id="detail-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-meta">
+                    <span id="detail-lang" class="lang-badge"></span>
+                    <div id="detail-tags" class="detail-tags"></div>
+                </div>
+                <p id="detail-description" class="detail-description"></p>
+                <div class="detail-code">
+                    <pre><code id="detail-code" class="hljs"></code></pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="copy-btn" class="btn btn-secondary" aria-label="Copy code">📋 Copy</button>
+                <button id="delete-btn" class="btn btn-danger" aria-label="Delete snippet">🗑 Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="form-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="form-title">Add Snippet</h2>
+                <button class="modal-close" id="form-close" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="snippet-form" class="snippet-form">
+                <div class="form-group">
+                    <label for="form-title-input">Title</label>
+                    <input
+                        type="text"
+                        id="form-title-input"
+                        required
+                        placeholder="e.g., Parse JSON"
+                        aria-label="Snippet title"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="form-lang">Language</label>
+                    <select id="form-lang" required aria-label="Programming language">
+                        <option value="">Select language</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="go">Go</option>
+                        <option value="rust">Rust</option>
+                        <option value="typescript">TypeScript</option>
+                        <option value="sql">SQL</option>
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="bash">Bash</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="form-description">Description</label>
+                    <input
+                        type="text"
+                        id="form-description"
+                        placeholder="Brief description (optional)"
+                        aria-label="Snippet description"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="form-tags">Tags (comma-separated)</label>
+                    <input
+                        type="text"
+                        id="form-tags"
+                        placeholder="e.g., parsing, utility, api"
+                        aria-label="Snippet tags"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="form-code">Code</label>
+                    <textarea
+                        id="form-code"
+                        required
+                        rows="10"
+                        placeholder="Paste your code here"
+                        aria-label="Snippet code"
+                    ></textarea>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary">Save Snippet</button>
+                    <button type="button" class="btn btn-secondary" id="form-cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" style="display: none;"></div>
+
+    <!-- Scripts -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
